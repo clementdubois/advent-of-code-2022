@@ -6,8 +6,8 @@ export class CalorieCountingSolver {
 
     }
 
-    solve(input: string): number {
+    solve(input: string, numberOfElvesToCount: number = 1): number {
         const parsedInput = this.calorieInputParser.parse(input);
-        return this.calorieCounter.countMaxCalories(parsedInput);
+        return this.calorieCounter.countMaxCalories(parsedInput, {numberOfElves:numberOfElvesToCount});
     }
 }
