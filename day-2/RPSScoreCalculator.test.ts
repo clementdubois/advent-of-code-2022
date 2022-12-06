@@ -59,6 +59,9 @@ class ScoreOutcomeCalculator {
 * est ce qu'il faut décomposé sachant que d'un point de vue externe seul nous interesse le total ?
 * => Ma solution, je créer des classe intermédiaire que je tests, pas sur que ça soit ok
 * => Pareil avec Round que je teste pour avoir l'exhaustivité des cas mais quand je commence les tests j'ai déjà pleins de cas qui sont vert
+* => Idem pour les tests de WIN qui étaient déjà tous vert
+* => J'ai bien découpé les responsabilités et testé unitairement tous les cas mais est ce que je suis pas trop couplé à l'implem,
+*  j'ai l'impression qui si je change ma structure de classe mes tests bas niveau (genre Round) vont être un frein
 * */
 describe("RPSScoreCalculator", () => {
     describe("Round", () => {
@@ -115,6 +118,32 @@ describe("RPSScoreCalculator", () => {
                 const outcome = round.outcome();
                 // THEN
                 expect(outcome).toEqual(OUTCOME.LOSS)
+            })
+        })
+        describe("Win", () => {
+            test("Outcome should be Win if Paper and Scissors", () => {
+                // GIVEN
+                const round = new Round(SHAPE.PAPER, SHAPE.SCISSORS);
+                // WHEN
+                const outcome = round.outcome();
+                // THEN
+                expect(outcome).toEqual(OUTCOME.WIN)
+            })
+            test("Outcome should be Win if Rock and Paper", () => {
+                // GIVEN
+                const round = new Round(SHAPE.ROCK, SHAPE.PAPER);
+                // WHEN
+                const outcome = round.outcome();
+                // THEN
+                expect(outcome).toEqual(OUTCOME.WIN)
+            })
+            test("Outcome should be Win if Scissors and Rock", () => {
+                // GIVEN
+                const round = new Round(SHAPE.SCISSORS, SHAPE.ROCK);
+                // WHEN
+                const outcome = round.outcome();
+                // THEN
+                expect(outcome).toEqual(OUTCOME.WIN)
             })
         })
     });
