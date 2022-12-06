@@ -1,22 +1,34 @@
-enum SHAPE_OPPONENT {
-    ROCK = "A",
-    PAPER = "B"
-}
-
-enum SHAPE_ME {
-    ROCK = "X",
-    PAPER = "Y"
+enum SHAPE {
+    ROCK,
+    PAPER
 }
 
 class RPSScoreCalculator {
-    count(rounds: string[][]) {
+    count(rounds: Round[]) {
         return 8;
     }
 }
 
+enum OUTCOME {
+    WIN,
+    LOSS,
+    DRAW
+}
+
+class Round {
+    constructor(private opponentMove: SHAPE, private myMove: SHAPE) {}
+
+    outcome(): OUTCOME {
+        return this.opponentMove === this.myMove ? OUTCOME.DRAW : OUTCOME.LOSS
+    }
+}
+
 class ScoreOutcomeCalculator {
-    count() {
-        return 0
+    private static DRAW_SCORE = 3;
+    private static LOSS_SCORE = 0;
+
+    count(round: Round) {
+        return round.outcome() === OUTCOME.DRAW ? ScoreOutcomeCalculator.DRAW_SCORE : ScoreOutcomeCalculator.LOSS_SCORE
     }
 }
 
@@ -29,21 +41,32 @@ describe("RPSScoreCalculator", () => {
     describe("ScoreOutcomeCalculator", () => {
         test("Should return 0 if I lose", () => {
             // GIVEN
-            const rounds = [[SHAPE_OPPONENT.PAPER, SHAPE_ME.ROCK]]
+            const round1 = new Round(SHAPE.PAPER, SHAPE.ROCK);
             let scoreOutcomeCalculator = new ScoreOutcomeCalculator();
 
             // WHEN
-            const outcomeScore = scoreOutcomeCalculator.count();
+            const outcomeScore = scoreOutcomeCalculator.count(round1);
             // THEN
             expect(outcomeScore).toEqual(0)
+        })
+
+        test("Should return 3 if draw", () => {
+            // GIVEN
+            const round1 = new Round(SHAPE.PAPER, SHAPE.PAPER);
+            let scoreOutcomeCalculator = new ScoreOutcomeCalculator();
+
+            // WHEN
+            const outcomeScore = scoreOutcomeCalculator.count(round1);
+            // THEN
+            expect(outcomeScore).toEqual(3)
         })
     })
     test("Should return 8 for A - Y / Rock - Paper", () => {
         // GIVEN
-        const rounds = [[SHAPE_OPPONENT.ROCK, SHAPE_ME.PAPER]]
+        const round1 = new Round(SHAPE.PAPER, SHAPE.ROCK);
         const rpsScoreCalculator = new RPSScoreCalculator();
         // WHEN
-        const score = rpsScoreCalculator.count(rounds);
+        const score = rpsScoreCalculator.count([round1]);
         // THEN
         expect(score).toEqual(8)
     })
