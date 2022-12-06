@@ -59,10 +59,19 @@ class ScoreOutcomeCalculator {
 }
 
 class ScoreBonusCalculator {
-    count(): number {
-        return 1;
+    count(shape: SHAPE): number {
+        switch (shape){
+            case SHAPE.ROCK:
+                return 1;
+            case SHAPE.PAPER:
+                return 2;
+            case SHAPE.SCISSORS:
+                return 3;
+
+        }
     }
 }
+
 
 /* Questions qui me viennent :
 *  - Avec cette démarche j'implémente deux règles en même temps ( calcul du score de la mache = point de victoire + ce qu'on a joué),
@@ -160,11 +169,30 @@ describe("RPSScoreCalculator", () => {
     describe("ScoreBonusCalculator", () => {
         test('Should return 1 for Rock', () => {
             // GIVEN
+            const shape = SHAPE.ROCK
             let scoreBonusCalcutor = new ScoreBonusCalculator();
             // WHEN
-            const bonus = scoreBonusCalcutor.count();
+            const bonus = scoreBonusCalcutor.count(shape);
             // THEN
             expect(bonus).toEqual(1)
+        })
+        test('Should return 2 for Paper', () => {
+            // GIVEN
+            const shape = SHAPE.PAPER
+            let scoreBonusCalcutor = new ScoreBonusCalculator();
+            // WHEN
+            const bonus = scoreBonusCalcutor.count(shape);
+            // THEN
+            expect(bonus).toEqual(2)
+        })
+        test('Should return 3 for Scissors', () => {
+            // GIVEN
+            const shape = SHAPE.SCISSORS
+            let scoreBonusCalcutor = new ScoreBonusCalculator();
+            // WHEN
+            const bonus = scoreBonusCalcutor.count(shape);
+            // THEN
+            expect(bonus).toEqual(3)
         })
     })
     describe("ScoreOutcomeCalculator", () => {
