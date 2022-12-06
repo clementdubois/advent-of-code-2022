@@ -11,6 +11,10 @@ enum OUTCOME {
 }
 
 class RPSScoreCalculator {
+    private scoreOutcomeCalculator: ScoreOutcomeCalculator;
+    constructor() {
+        this.scoreOutcomeCalculator = new ScoreOutcomeCalculator()
+    }
     count(rounds: Round[]) {
         return 8;
     }
@@ -51,6 +55,12 @@ class ScoreOutcomeCalculator {
             case OUTCOME.LOSS :
                 return ScoreOutcomeCalculator.LOSS_SCORE;
         }
+    }
+}
+
+class ScoreBonusCalculator {
+    count(): number {
+        return 1;
     }
 }
 
@@ -147,45 +157,66 @@ describe("RPSScoreCalculator", () => {
             })
         })
     });
+    describe("ScoreBonusCalculator", () => {
+        test('Should return 1 for Rock', () => {
+            // GIVEN
+            let scoreBonusCalcutor = new ScoreBonusCalculator();
+            // WHEN
+            const bonus = scoreBonusCalcutor.count();
+            // THEN
+            expect(bonus).toEqual(1)
+        })
+    })
     describe("ScoreOutcomeCalculator", () => {
         test("Should return 0 if I lose", () => {
             // GIVEN
-            const round1 = new Round(SHAPE.PAPER, SHAPE.ROCK);
+            const round = new Round(SHAPE.PAPER, SHAPE.ROCK);
             const scoreOutcomeCalculator = new ScoreOutcomeCalculator();
             // WHEN
-            const outcomeScore = scoreOutcomeCalculator.count(round1);
+            const outcomeScore = scoreOutcomeCalculator.count(round);
             // THEN
             expect(outcomeScore).toEqual(0)
         })
 
         test("Should return 3 if draw", () => {
             // GIVEN
-            const round1 = new Round(SHAPE.PAPER, SHAPE.PAPER);
+            const round = new Round(SHAPE.PAPER, SHAPE.PAPER);
             const scoreOutcomeCalculator = new ScoreOutcomeCalculator();
             // WHEN
-            const outcomeScore = scoreOutcomeCalculator.count(round1);
+            const outcomeScore = scoreOutcomeCalculator.count(round);
             // THEN
             expect(outcomeScore).toEqual(3)
         })
 
         test("Should return 6 if win", () => {
             // GIVEN
-            const round1 = new Round(SHAPE.ROCK, SHAPE.PAPER);
+            const round = new Round(SHAPE.ROCK, SHAPE.PAPER);
             const scoreOutcomeCalculator = new ScoreOutcomeCalculator();
             // WHEN
-            const outcomeScore = scoreOutcomeCalculator.count(round1);
+            const outcomeScore = scoreOutcomeCalculator.count(round);
             // THEN
             expect(outcomeScore).toEqual(6)
         })
     })
-    test("Should return 8 for A - Y / Rock - Paper", () => {
-        // GIVEN
-        const round1 = new Round(SHAPE.PAPER, SHAPE.ROCK);
-        const rpsScoreCalculator = new RPSScoreCalculator();
-        // WHEN
-        const score = rpsScoreCalculator.count([round1]);
-        // THEN
-        expect(score).toEqual(8)
+    describe("ScoreCalculator", () => {
+        test("Should return 8 for Rock - Paper", () => {
+            // GIVEN
+            const round = new Round(SHAPE.ROCK, SHAPE.PAPER);
+            const rpsScoreCalculator = new RPSScoreCalculator();
+            // WHEN
+            const score = rpsScoreCalculator.count([round]);
+            // THEN
+            expect(score).toEqual(8)
+        })
+        test.skip("Should return 1 for Paper - Rock", () => {
+            // GIVEN
+            const round = new Round(SHAPE.PAPER, SHAPE.ROCK);
+            const rpsScoreCalculator = new RPSScoreCalculator();
+            // WHEN
+            const score = rpsScoreCalculator.count([round]);
+            // THEN
+            expect(score).toEqual(1)
+        })
     })
 
 });
