@@ -1,13 +1,4 @@
-export enum OPPONENT_MOVE {
-    ROCK = "A",
-    PAPER = "B",
-    SCISSORS = 'C'
-}
-export enum MY_MOVE {
-    ROCK = "X",
-    PAPER = "Y",
-    SCISSORS = "Z",
-}
+import {MY_MOVE, OPPONENT_MOVE} from "./MovesToRoundTransformer";
 
 export type InputRound = [OPPONENT_MOVE, MY_MOVE];
 

@@ -1,5 +1,5 @@
 import {RPSInputParser} from "../src/RPSInputParser";
-import {MovesToRoundTransformer} from "../src/MovesToRoundTransformer";
+import {MovesToRoundWithBothMoveTransformerStrategy} from "../src/MovesToRoundTransformer";
 import {RPSScoreCalculator} from "../src/RPSScoreCalculator";
 import {RPSSolver} from "../src/RPSSolver";
 
@@ -7,7 +7,7 @@ describe("RPSSolver", () => {
     let rpsSolver : RPSSolver;
     beforeEach(() => {
         const rpsInputParser:RPSInputParser = new RPSInputParser();
-        const movesToRPSTransformer : MovesToRoundTransformer = new MovesToRoundTransformer();
+        const movesToRPSTransformer : MovesToRoundWithBothMoveTransformerStrategy = new MovesToRoundWithBothMoveTransformerStrategy();
         const rpsCalculator : RPSScoreCalculator = new RPSScoreCalculator()
         rpsSolver = new RPSSolver(rpsInputParser, movesToRPSTransformer, rpsCalculator)
     })

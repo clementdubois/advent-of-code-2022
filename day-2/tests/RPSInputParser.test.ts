@@ -1,4 +1,5 @@
-import {MY_MOVE, OPPONENT_MOVE, RPSInputParser} from "../src/RPSInputParser";
+import {RPSInputParser} from "../src/RPSInputParser";
+import {MY_MOVE, OPPONENT_MOVE} from "../src/MovesToRoundTransformer";
 
 /* Au début j'avais juste un StringInputToRoundParser, je me rends compte qu'il y a deux responsabilités :
 transformer l'input textuel en tableau et transformer les coups en SHAPE

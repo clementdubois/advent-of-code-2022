@@ -1,11 +1,10 @@
-import {MovesToRoundTransformer} from "../src/MovesToRoundTransformer";
-import {MY_MOVE, OPPONENT_MOVE} from "../src/RPSInputParser";
+import {MovesToRoundWithBothMoveTransformerStrategy, MY_MOVE, OPPONENT_MOVE} from "../src/MovesToRoundTransformer";
 import {SHAPE} from "../src/RPSScoreCalculator";
 
-describe("MovesToRPSTransformer", () => {
-    let movesToRPSTransformer: MovesToRoundTransformer;
+describe("MovesToRoundWithBothMoveTransformerStrategy", () => {
+    let movesToRPSTransformer: MovesToRoundWithBothMoveTransformerStrategy;
     beforeEach(() => {
-        movesToRPSTransformer = new MovesToRoundTransformer()
+        movesToRPSTransformer = new MovesToRoundWithBothMoveTransformerStrategy()
     });
     describe("Opponent move", () => {
 

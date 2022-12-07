@@ -1,11 +1,26 @@
 import {Round, SHAPE} from "./RPSScoreCalculator";
-import {MY_MOVE, OPPONENT_MOVE} from "./RPSInputParser";
 
-export class MovesToRoundTransformer {
+export enum OPPONENT_MOVE {
+    ROCK = "A",
+    PAPER = "B",
+    SCISSORS = 'C'
+}
+
+export enum MY_MOVE {
+    ROCK = "X",
+    PAPER = "Y",
+    SCISSORS = "Z",
+}
+
+interface MovesToRoundTransformerStrategy {
+    transform(rounds: [OPPONENT_MOVE, MY_MOVE][]): Round[]
+}
+
+export class MovesToRoundWithBothMoveTransformerStrategy implements MovesToRoundTransformerStrategy{
     transform(rounds: [OPPONENT_MOVE, MY_MOVE][]): Round[] {
         return rounds.map(round => new Round(
-            MovesToRoundTransformer.transformOpponentMoveToRPS(round[0]),
-            MovesToRoundTransformer.transformMyMoveToRPS(round[1])
+            MovesToRoundWithBothMoveTransformerStrategy.transformOpponentMoveToRPS(round[0]),
+            MovesToRoundWithBothMoveTransformerStrategy.transformMyMoveToRPS(round[1])
         ))
     }
 
