@@ -1,20 +1,7 @@
 import {RPSInputParser} from "../src/RPSInputParser";
 import {MovesToRoundTransformer} from "../src/MovesToRoundTransformer";
 import {RPSScoreCalculator} from "../src/RPSScoreCalculator";
-
-class RPSSolver {
-    constructor(
-        private rpsInputParser: RPSInputParser,
-        private movesToRPSTransformer: MovesToRoundTransformer,
-        private rpsScoreCalculator: RPSScoreCalculator) {
-    }
-
-    solve(input: string): number {
-        const parsedInput = this.rpsInputParser.parse(input);
-        const rpsRounds = this.movesToRPSTransformer.transform(parsedInput);
-        return this.rpsScoreCalculator.getTotalScore(rpsRounds)
-    }
-}
+import {RPSSolver} from "../src/RPSSolver";
 
 describe("RPSSolver", () => {
     let rpsSolver : RPSSolver;
@@ -24,7 +11,7 @@ describe("RPSSolver", () => {
         const rpsCalculator : RPSScoreCalculator = new RPSScoreCalculator()
         rpsSolver = new RPSSolver(rpsInputParser, movesToRPSTransformer, rpsCalculator)
     })
-    test("Doit renvoyer 0 si rien dans l'input", () => {
+    test("Should return 0 if no input", () => {
         const input = "";
 
         const result = rpsSolver.solve(input);
@@ -32,11 +19,35 @@ describe("RPSSolver", () => {
         expect(result).toEqual(0)
     })
 
-    test("Doit renvoyer 8 si A Y", () => {
+    test("Should return 8 for win with paper", () => {
         const input = "A Y";
 
         const result = rpsSolver.solve(input);
 
         expect(result).toEqual(8)
+    })
+
+    test("Should return 1 for loss with rock", () => {
+        const input = "B X";
+
+        const result = rpsSolver.solve(input);
+
+        expect(result).toEqual(1)
+    })
+
+    test("Should return 6 for draw with scissors", () => {
+        const input = "C Z";
+
+        const result = rpsSolver.solve(input);
+
+        expect(result).toEqual(6)
+    })
+
+    test("Should return 15 for total score of these three rounds", () => {
+        const input = "A Y\nB X\nC Z";
+
+        const result = rpsSolver.solve(input);
+
+        expect(result).toEqual(15)
     })
 })
