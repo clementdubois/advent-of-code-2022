@@ -17,6 +17,7 @@ export enum MY_MOVE {
 export enum MY_OUTCOME {
     LOSE = "X",
     DRAW = "Y",
+    WIN = "Z",
 }
 
 export abstract class MovesToRoundStrategy {
@@ -26,6 +27,7 @@ export abstract class MovesToRoundStrategy {
             this.transformMyMoveToRPS(round)
         ))
     }
+
     protected abstract transformMyMoveToRPS(round: [OPPONENT_MOVE, MY_STRATEGY]): SHAPE
 
     protected transformOpponentMoveToRPS(opponentMove: OPPONENT_MOVE): SHAPE {
