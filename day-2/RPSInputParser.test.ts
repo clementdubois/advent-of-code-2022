@@ -2,7 +2,9 @@ import {SHAPE} from "./RPSScoreCalculator";
 
 class RPSInputParser {
     parse(input: string) {
-        return input.length ? [[SHAPE.ROCK]] : []
+        if(input === "A") return [[SHAPE.ROCK]];
+        if(input === "B") return [[SHAPE.PAPER]];
+        return []
     }
 }
 
@@ -23,5 +25,14 @@ describe("RPSInputParser", () => {
         const rounds = rpsInputParser.parse(input)
 
         expect(rounds[0][0]).toEqual(SHAPE.ROCK)
+    })
+
+    test("Should return Paper shape for 'B'", () => {
+        const input = "B";
+        const rpsInputParser = new RPSInputParser()
+
+        const rounds = rpsInputParser.parse(input)
+
+        expect(rounds[0][0]).toEqual(SHAPE.PAPER)
     })
 });
