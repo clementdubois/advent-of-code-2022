@@ -1,5 +1,4 @@
 import {SHAPE} from "./RPSScoreCalculator";
-import {transform} from "@babel/core";
 
 enum OPPONENT_MOVE {
     ROCK = "A",
@@ -13,33 +12,37 @@ enum MY_MOVE {
     SCISSORS = "Z",
 }
 
-class RPSInputParser {
-    private inputMoveToRPSTransformer: InputMoveToRPSTransformer;
+class StringInputToRoundParser {
+    private inputMoveToRPSTransformer: MoveToRPSTransformer;
+
     constructor() {
-        this.inputMoveToRPSTransformer = new InputMoveToRPSTransformer();
-    }
-    parse(input: string): [SHAPE, SHAPE][] {
-        const round1 = RPSInputParser.parseOneRound(input);
-        if (round1.length) {
-            return [
-                this.inputMoveToRPSTransformer.transform(round1),
-            ]
-        }
-        return []
+        this.inputMoveToRPSTransformer = new MoveToRPSTransformer();
     }
 
-    private static parseOneRound(input: string) {
-        return input.split(" ").filter(round => round) as [OPPONENT_MOVE, MY_MOVE];
+    parse(input: string): [SHAPE, SHAPE][] {
+       return StringInputToRoundParser
+           .parseRounds(input)
+           .map(StringInputToRoundParser.parseMoves)
+           .map(this.inputMoveToRPSTransformer.transform)
+    }
+
+    private static parseRounds(input: string) {
+        return input.split("\n").filter(round => round);
+    }
+
+    private static parseMoves(input: string) {
+        const MOVE_SEPARATOR = " ";
+        return input.split(MOVE_SEPARATOR).filter(move => move) as [OPPONENT_MOVE, MY_MOVE];
     }
 
 
 }
 
-class InputMoveToRPSTransformer {
-    transform(round: [OPPONENT_MOVE, MY_MOVE]):  [SHAPE, SHAPE] {
+class MoveToRPSTransformer {
+    transform(round: [OPPONENT_MOVE, MY_MOVE]): [SHAPE, SHAPE] {
         return [
-            InputMoveToRPSTransformer.transformOpponentMoveToRPS(round[0]),
-            InputMoveToRPSTransformer.transformMyMoveToRPS(round[1])
+            MoveToRPSTransformer.transformOpponentMoveToRPS(round[0]),
+            MoveToRPSTransformer.transformMyMoveToRPS(round[1])
         ]
     }
 
@@ -66,16 +69,16 @@ class InputMoveToRPSTransformer {
     }
 }
 
-/* Au début j'avais juste un RPSInputParser, je me rends compte qu'il y a deux responsabilités :
+/* Au début j'avais juste un StringInputToRoundParser, je me rends compte qu'il y a deux responsabilités :
 transformer l'input textuel en tableau et transformer les coups en SHAPE
-=> J'extrais un InputMoveToRPSTransformer, est ce que je refais les tests U, si oui est ce que j'enleve les TU du parser,
+=> J'extrais un MoveToRPSTransformer, est ce que je refais les tests U, si oui est ce que j'enleve les TU du parser,
 est ce que je suis pas en train de coupler à l'implem, est ce qu'il faut une autre classe qui fasse le relai entre le parser et le transformer ?
 */
-describe("RPSInputParser", () => {
-    let rpsInputParser: RPSInputParser;
+describe("StringInputToRoundParser", () => {
+    let rpsInputParser: StringInputToRoundParser;
 
     beforeEach(() => {
-        rpsInputParser = new RPSInputParser();
+        rpsInputParser = new StringInputToRoundParser();
     })
     describe("Opponent move", () => {
 
@@ -132,6 +135,30 @@ describe("RPSInputParser", () => {
             const rounds = rpsInputParser.parse(input)
 
             expect(rounds[0][1]).toEqual(SHAPE.SCISSORS)
+        })
+    })
+    describe("Complete round", () => {
+        test("Sould return entire round as shape", () => {
+            const input = OPPONENT_MOVE.ROCK + " " + MY_MOVE.SCISSORS;
+
+            const rounds = rpsInputParser.parse(input)
+
+            expect(rounds[0]).toEqual([SHAPE.ROCK, SHAPE.SCISSORS])
+        })
+
+        test("Sould return multiple rounds as shape", () => {
+            const round1 = OPPONENT_MOVE.ROCK + " " + MY_MOVE.SCISSORS;
+            const round2 = OPPONENT_MOVE.PAPER + " " + MY_MOVE.ROCK;
+            const round3 = OPPONENT_MOVE.SCISSORS + " " + MY_MOVE.PAPER;
+            const input = `${round1}\n${round2}\n${round3}`;
+
+            const rounds = rpsInputParser.parse(input)
+
+            expect(rounds).toEqual([
+                [SHAPE.ROCK, SHAPE.SCISSORS],
+                [SHAPE.PAPER, SHAPE.ROCK],
+                [SHAPE.SCISSORS, SHAPE.PAPER]
+            ])
         })
     })
 });
