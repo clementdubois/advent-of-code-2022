@@ -6,20 +6,26 @@ export enum OPPONENT_MOVE {
     SCISSORS = 'C'
 }
 
+type MY_STRATEGY = "X" | "Y" | "Z"
+
 export enum MY_MOVE {
     ROCK = "X",
     PAPER = "Y",
     SCISSORS = "Z",
 }
 
+export enum MY_OUTCOME {
+    LOSE = "X"
+}
+
 export abstract class MovesToRoundStrategy {
-    transform(rounds: [OPPONENT_MOVE, MY_MOVE][]): Round[] {
+    transform(rounds: [OPPONENT_MOVE, MY_STRATEGY][]): Round[] {
         return rounds.map(round => new Round(
             this.transformOpponentMoveToRPS(round[0]),
-            this.transformMyMoveToRPS(round[1])
+            this.transformMyMoveToRPS(round)
         ))
     }
-    protected abstract transformMyMoveToRPS(myOption: MY_MOVE): SHAPE
+    protected abstract transformMyMoveToRPS(round: [OPPONENT_MOVE, MY_STRATEGY]): SHAPE
 
     protected transformOpponentMoveToRPS(opponentMove: OPPONENT_MOVE): SHAPE {
         switch (opponentMove) {
@@ -34,7 +40,8 @@ export abstract class MovesToRoundStrategy {
 }
 
 export class MovesToRoundWithBothMoveStrategy extends MovesToRoundStrategy {
-    transformMyMoveToRPS(myMove: MY_MOVE): SHAPE {
+    transformMyMoveToRPS(round: [OPPONENT_MOVE, MY_MOVE]): SHAPE {
+        const myMove = round[1]
         switch (myMove) {
             case MY_MOVE.PAPER:
                 return SHAPE.PAPER;
