@@ -1,4 +1,5 @@
-import {Round, SHAPE} from "./RPSScoreCalculator";
+import {SHAPE, ShapeHandler} from "./Shape";
+import {Round} from "./Round";
 
 export enum OPPONENT_MOVE {
     ROCK = "A",
@@ -20,88 +21,40 @@ export enum MY_OUTCOME {
     WIN = "Z",
 }
 
+
 export abstract class MovesToRoundStrategy {
     transform(rounds: [OPPONENT_MOVE, MY_STRATEGY][]): Round[] {
         return rounds.map(round => new Round(
-            this.transformOpponentMoveToRPS(round[0]),
-            this.transformMyMoveToRPS(round)
+            this.transformOpponentMoveToShape(round[0]),
+            this.transformMyOptionToShape(round)
         ))
     }
+    protected abstract transformMyOptionToShape(round: [OPPONENT_MOVE, MY_STRATEGY]): SHAPE
 
-    protected abstract transformMyMoveToRPS(round: [OPPONENT_MOVE, MY_STRATEGY]): SHAPE
-
-    protected transformOpponentMoveToRPS(opponentMove: OPPONENT_MOVE): SHAPE {
-        switch (opponentMove) {
-            case OPPONENT_MOVE.ROCK:
-                return SHAPE.ROCK;
-            case OPPONENT_MOVE.PAPER:
-                return SHAPE.PAPER;
-            case OPPONENT_MOVE.SCISSORS:
-                return SHAPE.SCISSORS;
-        }
+    protected transformOpponentMoveToShape(opponentMove: OPPONENT_MOVE): SHAPE {
+        const opponentShape = ShapeHandler.fromOpponentMove(opponentMove);
+        return opponentShape.toShape()
     }
 }
 
-/* Y'a beaucoup de switch dans tous les sens, les enum sont peut être pas le mieux.
-Peut être qu'avoir une class Rock et Paper et Scissors avec des méthodes pour avoir leur coup gagnant + perdant + draw + eux même en Shape
-Mais bon c'est du X Y Z */
 export class MovesToRoundWithBothMoveStrategy extends MovesToRoundStrategy {
-    transformMyMoveToRPS(round: [OPPONENT_MOVE, MY_MOVE]): SHAPE {
-        const myMove = round[1]
-        switch (myMove) {
-            case MY_MOVE.PAPER:
-                return SHAPE.PAPER;
-            case MY_MOVE.SCISSORS:
-                return SHAPE.SCISSORS;
-            case MY_MOVE.ROCK:
-                return SHAPE.ROCK;
-        }
+    transformMyOptionToShape(round: [OPPONENT_MOVE, MY_MOVE]): SHAPE {
+        const myMoveShape = ShapeHandler.fromMyMove(round[1])
+        return myMoveShape.toShape()
     }
 }
 
 export class MovesToRoundOutcomeStrategy extends MovesToRoundStrategy {
-    protected transformMyMoveToRPS([opponentMove, myOutcome]: [OPPONENT_MOVE, MY_OUTCOME]): SHAPE {
+    protected transformMyOptionToShape([opponentMove, myOutcome]: [OPPONENT_MOVE, MY_OUTCOME]): SHAPE {
+        const opponentMoveShape = ShapeHandler.fromOpponentMove(opponentMove)
         switch (myOutcome) {
             case MY_OUTCOME.WIN:
-                return MovesToRoundOutcomeStrategy.playToWin(opponentMove);
+                return opponentMoveShape.loseAgainst();
             case MY_OUTCOME.DRAW:
-                return MovesToRoundOutcomeStrategy.playToDraw(opponentMove);
+                return opponentMoveShape.drawWith();
             case MY_OUTCOME.LOSE:
-                return MovesToRoundOutcomeStrategy.playToLose(opponentMove);
+                return opponentMoveShape.winAgainst()
 
-        }
-    }
-
-    private static playToLose(opponentMove: OPPONENT_MOVE): SHAPE {
-        switch (opponentMove) {
-            case OPPONENT_MOVE.ROCK:
-                return SHAPE.SCISSORS;
-            case OPPONENT_MOVE.PAPER:
-                return SHAPE.ROCK;
-            case OPPONENT_MOVE.SCISSORS:
-                return SHAPE.PAPER;
-        }
-    }
-
-    private static playToDraw(opponentMove: OPPONENT_MOVE): SHAPE {
-        switch (opponentMove) {
-            case OPPONENT_MOVE.ROCK:
-                return SHAPE.ROCK;
-            case OPPONENT_MOVE.PAPER:
-                return SHAPE.PAPER;
-            case OPPONENT_MOVE.SCISSORS:
-                return SHAPE.SCISSORS;
-        }
-    }
-
-    private static playToWin(opponentMove: OPPONENT_MOVE): SHAPE {
-        switch (opponentMove) {
-            case OPPONENT_MOVE.ROCK:
-                return SHAPE.PAPER;
-            case OPPONENT_MOVE.PAPER:
-                return SHAPE.SCISSORS;
-            case OPPONENT_MOVE.SCISSORS:
-                return SHAPE.ROCK;
         }
     }
 }

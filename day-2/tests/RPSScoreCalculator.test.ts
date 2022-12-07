@@ -1,11 +1,10 @@
 import {
-    OUTCOME,
-    Round,
     RPSScoreCalculator,
     ScoreBonusCalculator,
-    ScoreOutcomeCalculator,
-    SHAPE
+    ScoreOutcomeCalculator
 } from "../src/RPSScoreCalculator";
+import {SHAPE} from "../src/Shape";
+import {OUTCOME, Round} from "../src/Round";
 
 
 /* Questions qui me viennent :

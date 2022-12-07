@@ -1,14 +1,5 @@
-export enum SHAPE {
-    ROCK,
-    PAPER,
-    SCISSORS,
-}
-
-export enum OUTCOME {
-    WIN,
-    LOSS,
-    DRAW
-}
+import {SHAPE} from "./Shape";
+import {OUTCOME, Round} from "./Round";
 
 export class RPSScoreCalculator {
     private scoreOutcomeCalculator: ScoreOutcomeCalculator;
@@ -27,35 +18,6 @@ export class RPSScoreCalculator {
 
     private getScoreForRound(round: Round) {
         return this.scoreOutcomeCalculator.count(round) + this.scoreBonusCalculator.count(round.getMyMove());
-    }
-}
-
-export class Round {
-    constructor(private opponentMove: SHAPE, private myMove: SHAPE) {
-    }
-
-    outcome(): OUTCOME {
-        if (this.isDraw()) return OUTCOME.DRAW;
-        if (this.isLoss()) return OUTCOME.LOSS;
-        return OUTCOME.WIN;
-    }
-
-    public getMyMove(): SHAPE {
-        return this.myMove
-    }
-
-    public getOpponentMove(): SHAPE {
-        return this.opponentMove
-    }
-
-    private isDraw() {
-        return this.opponentMove === this.myMove;
-    }
-
-    private isLoss() {
-        return this.opponentMove === SHAPE.PAPER && this.myMove === SHAPE.ROCK
-            || this.opponentMove === SHAPE.ROCK && this.myMove === SHAPE.SCISSORS
-            || this.opponentMove === SHAPE.SCISSORS && this.myMove === SHAPE.PAPER;
     }
 }
 
