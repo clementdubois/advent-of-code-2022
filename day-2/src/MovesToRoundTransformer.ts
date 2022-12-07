@@ -15,7 +15,8 @@ export enum MY_MOVE {
 }
 
 export enum MY_OUTCOME {
-    LOSE = "X"
+    LOSE = "X",
+    DRAW = "Y",
 }
 
 export abstract class MovesToRoundStrategy {

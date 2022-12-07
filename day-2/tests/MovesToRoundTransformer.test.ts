@@ -103,6 +103,8 @@ describe("MovesToRoundWithBothMoveTransformerStrategy", () => {
 class MovesToRoundOutcomeStrategy extends MovesToRoundStrategy {
     protected transformMyMoveToRPS([opponentMove, myOutcome]: [OPPONENT_MOVE, MY_OUTCOME]): SHAPE {
         switch (myOutcome){
+            case MY_OUTCOME.DRAW:
+                return MovesToRoundOutcomeStrategy.playToDraw(opponentMove);
             case MY_OUTCOME.LOSE:
                 return MovesToRoundOutcomeStrategy.playToLose(opponentMove);
 
@@ -117,6 +119,17 @@ class MovesToRoundOutcomeStrategy extends MovesToRoundStrategy {
                 return SHAPE.ROCK;
             case OPPONENT_MOVE.SCISSORS:
                 return SHAPE.PAPER;
+        }
+    }
+
+    private static playToDraw(opponentMove: OPPONENT_MOVE): SHAPE {
+        switch (opponentMove){
+            case OPPONENT_MOVE.ROCK:
+                return SHAPE.ROCK;
+            case OPPONENT_MOVE.PAPER:
+                return SHAPE.PAPER;
+            case OPPONENT_MOVE.SCISSORS:
+                return SHAPE.SCISSORS;
         }
     }
 }
@@ -181,6 +194,32 @@ describe("MovesToRoundOutcomeStrategy", () => {
 
             test("Should return Scissors shape for opponent Rock", () => {
                 const input:[OPPONENT_MOVE, MY_OUTCOME][] = [[OPPONENT_MOVE.ROCK, MY_OUTCOME.LOSE]];
+
+                const rounds = movesToRoundOutcomeStrategy.transform(input)
+
+                expect(rounds[0].getMyMove()).toEqual(SHAPE.SCISSORS)
+            })
+        })
+
+        describe("I should draw if Y", () => {
+            test("Should return Paper shape for opponent Paper", () => {
+                const input:[OPPONENT_MOVE, MY_OUTCOME][] = [[OPPONENT_MOVE.PAPER, MY_OUTCOME.DRAW]];
+
+                const rounds = movesToRoundOutcomeStrategy.transform(input)
+
+                expect(rounds[0].getMyMove()).toEqual(SHAPE.PAPER)
+            })
+
+            test("Should return Rock shape for opponent Rock", () => {
+                const input:[OPPONENT_MOVE, MY_OUTCOME][] = [[OPPONENT_MOVE.ROCK, MY_OUTCOME.DRAW]];
+
+                const rounds = movesToRoundOutcomeStrategy.transform(input)
+
+                expect(rounds[0].getMyMove()).toEqual(SHAPE.ROCK)
+            })
+
+            test("Should return Scissors shape for opponent Scissors", () => {
+                const input:[OPPONENT_MOVE, MY_OUTCOME][] = [[OPPONENT_MOVE.SCISSORS, MY_OUTCOME.DRAW]];
 
                 const rounds = movesToRoundOutcomeStrategy.transform(input)
 
