@@ -44,6 +44,10 @@ export class Round {
         return this.myMove
     }
 
+    public getOpponentMove(): SHAPE {
+        return this.opponentMove
+    }
+
     private isDraw() {
         return this.opponentMove === this.myMove;
     }

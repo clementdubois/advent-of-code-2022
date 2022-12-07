@@ -1,11 +1,11 @@
-import {MovesToRPSTransformer} from "../src/MovesToRPSTransformer";
+import {MovesToRoundTransformer} from "../src/MovesToRoundTransformer";
 import {MY_MOVE, OPPONENT_MOVE} from "../src/RPSInputParser";
 import {SHAPE} from "../src/RPSScoreCalculator";
 
 describe("MovesToRPSTransformer", () => {
-    let movesToRPSTransformer: MovesToRPSTransformer;
+    let movesToRPSTransformer: MovesToRoundTransformer;
     beforeEach(() => {
-        movesToRPSTransformer = new MovesToRPSTransformer()
+        movesToRPSTransformer = new MovesToRoundTransformer()
     });
     describe("Opponent move", () => {
 
@@ -22,7 +22,8 @@ describe("MovesToRPSTransformer", () => {
 
             const rounds = movesToRPSTransformer.transform(input)
 
-            expect(rounds[0][0]).toEqual(SHAPE.ROCK)
+            /* Le getOpponentMove a été créer uniquement pour le test :'( */
+            expect(rounds[0].getOpponentMove()).toEqual(SHAPE.ROCK)
         })
 
         test("Should return Paper shape for 'B'", () => {
@@ -30,7 +31,7 @@ describe("MovesToRPSTransformer", () => {
 
             const rounds = movesToRPSTransformer.transform(input)
 
-            expect(rounds[0][0]).toEqual(SHAPE.PAPER)
+            expect(rounds[0].getOpponentMove()).toEqual(SHAPE.PAPER)
         })
 
         test("Should return Scissors shape for 'C'", () => {
@@ -38,7 +39,7 @@ describe("MovesToRPSTransformer", () => {
 
             const rounds = movesToRPSTransformer.transform(input)
 
-            expect(rounds[0][0]).toEqual(SHAPE.SCISSORS)
+            expect(rounds[0].getOpponentMove()).toEqual(SHAPE.SCISSORS)
         })
     })
     describe("My move", () => {
@@ -47,21 +48,21 @@ describe("MovesToRPSTransformer", () => {
 
             const rounds = movesToRPSTransformer.transform(input)
 
-            expect(rounds[0][1]).toEqual(SHAPE.ROCK)
+            expect(rounds[0].getMyMove()).toEqual(SHAPE.ROCK)
         })
         test("Should return Paper shape for 'Y'", () => {
             const input:[OPPONENT_MOVE, MY_MOVE][] = [[OPPONENT_MOVE.ROCK, MY_MOVE.PAPER]];
 
             const rounds = movesToRPSTransformer.transform(input)
 
-            expect(rounds[0][1]).toEqual(SHAPE.PAPER)
+            expect(rounds[0].getMyMove()).toEqual(SHAPE.PAPER)
         })
         test("Should return Scissors shape for 'Z'", () => {
             const input:[OPPONENT_MOVE, MY_MOVE][] = [[OPPONENT_MOVE.ROCK, MY_MOVE.SCISSORS]];
 
             const rounds = movesToRPSTransformer.transform(input)
 
-            expect(rounds[0][1]).toEqual(SHAPE.SCISSORS)
+            expect(rounds[0].getMyMove()).toEqual(SHAPE.SCISSORS)
         })
     })
     describe("Complete round", () => {
@@ -70,7 +71,8 @@ describe("MovesToRPSTransformer", () => {
 
             const rounds = movesToRPSTransformer.transform(input)
 
-            expect(rounds[0]).toEqual([SHAPE.ROCK, SHAPE.SCISSORS])
+            expect(rounds[0].getOpponentMove()).toEqual(SHAPE.ROCK)
+            expect(rounds[0].getMyMove()).toEqual(SHAPE.SCISSORS)
         })
 
         test("Sould return multiple rounds as shape", () => {
@@ -81,11 +83,12 @@ describe("MovesToRPSTransformer", () => {
 
             const rounds = movesToRPSTransformer.transform(input)
 
-            expect(rounds).toEqual([
-                [SHAPE.ROCK, SHAPE.SCISSORS],
-                [SHAPE.PAPER, SHAPE.ROCK],
-                [SHAPE.SCISSORS, SHAPE.PAPER]
-            ])
+            expect(rounds[0].getOpponentMove()).toEqual(SHAPE.ROCK)
+            expect(rounds[0].getMyMove()).toEqual(SHAPE.SCISSORS)
+            expect(rounds[1].getOpponentMove()).toEqual(SHAPE.PAPER)
+            expect(rounds[1].getMyMove()).toEqual(SHAPE.ROCK)
+            expect(rounds[2].getOpponentMove()).toEqual(SHAPE.SCISSORS)
+            expect(rounds[2].getMyMove()).toEqual(SHAPE.PAPER)
         })
     })
 })
