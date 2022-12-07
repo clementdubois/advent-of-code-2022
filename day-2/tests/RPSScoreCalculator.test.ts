@@ -5,7 +5,7 @@ import {
     ScoreBonusCalculator,
     ScoreOutcomeCalculator,
     SHAPE
-} from "./RPSScoreCalculator";
+} from "../src/RPSScoreCalculator";
 
 
 /* Questions qui me viennent :
@@ -37,7 +37,6 @@ describe("RPSScoreCalculator", () => {
                 // THEN
                 expect(outcome).toEqual(OUTCOME.DRAW)
             })
-
             test("Outcome should be draw if SCISSORS and SCISSORS", () => {
                 // GIVEN
                 const round = new Round(SHAPE.SCISSORS, SHAPE.SCISSORS);
