@@ -12,19 +12,16 @@ export enum MY_MOVE {
     SCISSORS = "Z",
 }
 
-interface MovesToRoundTransformerStrategy {
-    transform(rounds: [OPPONENT_MOVE, MY_MOVE][]): Round[]
-}
-
-export class MovesToRoundWithBothMoveTransformerStrategy implements MovesToRoundTransformerStrategy{
+export abstract class MovesToRoundStrategy {
     transform(rounds: [OPPONENT_MOVE, MY_MOVE][]): Round[] {
         return rounds.map(round => new Round(
-            MovesToRoundWithBothMoveTransformerStrategy.transformOpponentMoveToRPS(round[0]),
-            MovesToRoundWithBothMoveTransformerStrategy.transformMyMoveToRPS(round[1])
+            this.transformOpponentMoveToRPS(round[0]),
+            this.transformMyMoveToRPS(round[1])
         ))
     }
+    protected abstract transformMyMoveToRPS(myOption: MY_MOVE): SHAPE
 
-    private static transformOpponentMoveToRPS(opponentMove: OPPONENT_MOVE): SHAPE {
+    protected transformOpponentMoveToRPS(opponentMove: OPPONENT_MOVE): SHAPE {
         switch (opponentMove) {
             case OPPONENT_MOVE.ROCK:
                 return SHAPE.ROCK;
@@ -34,8 +31,10 @@ export class MovesToRoundWithBothMoveTransformerStrategy implements MovesToRound
                 return SHAPE.SCISSORS;
         }
     }
+}
 
-    private static transformMyMoveToRPS(myMove: MY_MOVE): SHAPE {
+export class MovesToRoundWithBothMoveStrategy extends MovesToRoundStrategy {
+    transformMyMoveToRPS(myMove: MY_MOVE): SHAPE {
         switch (myMove) {
             case MY_MOVE.PAPER:
                 return SHAPE.PAPER;

@@ -1,10 +1,17 @@
-import {MovesToRoundWithBothMoveTransformerStrategy, MY_MOVE, OPPONENT_MOVE} from "../src/MovesToRoundTransformer";
-import {SHAPE} from "../src/RPSScoreCalculator";
+import {
+    MovesToRoundStrategy,
+    MovesToRoundWithBothMoveStrategy,
+    MY_MOVE,
+    OPPONENT_MOVE
+} from "../src/MovesToRoundTransformer";
+import {Round, SHAPE} from "../src/RPSScoreCalculator";
 
+/* Question : Quand j'applique le pattern stratégie pour séparer la transformation selon que le coup soit un vrai coup (part 1 )
+*  ou que le coup soit le résultat (part2) je me retrouve a dupliqué plein de tests car la partie concernant les coups de l'adversaire restent identique*/
 describe("MovesToRoundWithBothMoveTransformerStrategy", () => {
-    let movesToRPSTransformer: MovesToRoundWithBothMoveTransformerStrategy;
+    let movesToRPSTransformer: MovesToRoundWithBothMoveStrategy;
     beforeEach(() => {
-        movesToRPSTransformer = new MovesToRoundWithBothMoveTransformerStrategy()
+        movesToRPSTransformer = new MovesToRoundWithBothMoveStrategy()
     });
     describe("Opponent move", () => {
 
