@@ -6,14 +6,24 @@ enum OPPONENT_MOVE {
     SCISSORS = 'C'
 }
 
+enum MY_MOVE {
+    ROCK = "X",
+}
+
 class RPSInputParser {
-    parse(input: string) {
-        const [opponentMove] = RPSInputParser.parseOneRound(input);
-        return opponentMove ? [[RPSInputParser.transformOpponentMoveToRPS(opponentMove)]] : []
+    parse(input: string): [SHAPE, SHAPE][] {
+        const [opponentMove, myMove] = RPSInputParser.parseOneRound(input);
+        if (opponentMove) {
+            return [[
+                RPSInputParser.transformOpponentMoveToRPS(opponentMove),
+                RPSInputParser.transformMyMoveToRPS(myMove)
+            ]]
+        }
+        return []
     }
 
     private static parseOneRound(input: string) {
-        return input.split(" ") as [OPPONENT_MOVE];
+        return input.split(" ") as [OPPONENT_MOVE, MY_MOVE];
     }
 
     private static transformOpponentMoveToRPS(opponentMove: OPPONENT_MOVE): SHAPE {
@@ -24,6 +34,13 @@ class RPSInputParser {
                 return SHAPE.PAPER;
             case OPPONENT_MOVE.SCISSORS:
                 return SHAPE.SCISSORS;
+        }
+    }
+
+    private static transformMyMoveToRPS(myMove: MY_MOVE): SHAPE {
+        switch (myMove) {
+            case MY_MOVE.ROCK:
+                return SHAPE.ROCK;
         }
     }
 }
@@ -68,7 +85,7 @@ describe("RPSInputParser", () => {
             expect(rounds[0][0]).toEqual(SHAPE.SCISSORS)
         })
     })
-    describe.skip("My move", () => {
+    describe("My move", () => {
         test("Should return Rock shape for 'X'", () => {
             const input = OPPONENT_MOVE.ROCK + " X";
 
