@@ -55,3 +55,50 @@ export class MovesToRoundWithBothMoveStrategy extends MovesToRoundStrategy {
         }
     }
 }
+
+export class MovesToRoundOutcomeStrategy extends MovesToRoundStrategy {
+    protected transformMyMoveToRPS([opponentMove, myOutcome]: [OPPONENT_MOVE, MY_OUTCOME]): SHAPE {
+        switch (myOutcome) {
+            case MY_OUTCOME.WIN:
+                return MovesToRoundOutcomeStrategy.playToWin(opponentMove);
+            case MY_OUTCOME.DRAW:
+                return MovesToRoundOutcomeStrategy.playToDraw(opponentMove);
+            case MY_OUTCOME.LOSE:
+                return MovesToRoundOutcomeStrategy.playToLose(opponentMove);
+
+        }
+    }
+
+    private static playToLose(opponentMove: OPPONENT_MOVE): SHAPE {
+        switch (opponentMove) {
+            case OPPONENT_MOVE.ROCK:
+                return SHAPE.SCISSORS;
+            case OPPONENT_MOVE.PAPER:
+                return SHAPE.ROCK;
+            case OPPONENT_MOVE.SCISSORS:
+                return SHAPE.PAPER;
+        }
+    }
+
+    private static playToDraw(opponentMove: OPPONENT_MOVE): SHAPE {
+        switch (opponentMove) {
+            case OPPONENT_MOVE.ROCK:
+                return SHAPE.ROCK;
+            case OPPONENT_MOVE.PAPER:
+                return SHAPE.PAPER;
+            case OPPONENT_MOVE.SCISSORS:
+                return SHAPE.SCISSORS;
+        }
+    }
+
+    private static playToWin(opponentMove: OPPONENT_MOVE): SHAPE {
+        switch (opponentMove) {
+            case OPPONENT_MOVE.ROCK:
+                return SHAPE.PAPER;
+            case OPPONENT_MOVE.PAPER:
+                return SHAPE.SCISSORS;
+            case OPPONENT_MOVE.SCISSORS:
+                return SHAPE.ROCK;
+        }
+    }
+}

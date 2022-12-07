@@ -1,5 +1,5 @@
 import {
-    MovesToRoundStrategy,
+    MovesToRoundOutcomeStrategy,
     MovesToRoundWithBothMoveStrategy,
     MY_MOVE,
     MY_OUTCOME,
@@ -99,53 +99,6 @@ describe("MovesToRoundWithBothMoveTransformerStrategy", () => {
         })
     })
 })
-
-class MovesToRoundOutcomeStrategy extends MovesToRoundStrategy {
-    protected transformMyMoveToRPS([opponentMove, myOutcome]: [OPPONENT_MOVE, MY_OUTCOME]): SHAPE {
-        switch (myOutcome){
-            case MY_OUTCOME.WIN:
-                return MovesToRoundOutcomeStrategy.playToWin(opponentMove);
-            case MY_OUTCOME.DRAW:
-                return MovesToRoundOutcomeStrategy.playToDraw(opponentMove);
-            case MY_OUTCOME.LOSE:
-                return MovesToRoundOutcomeStrategy.playToLose(opponentMove);
-
-        }
-    }
-
-    private static playToLose(opponentMove: OPPONENT_MOVE): SHAPE {
-        switch (opponentMove){
-            case OPPONENT_MOVE.ROCK:
-                return SHAPE.SCISSORS;
-            case OPPONENT_MOVE.PAPER:
-                return SHAPE.ROCK;
-            case OPPONENT_MOVE.SCISSORS:
-                return SHAPE.PAPER;
-        }
-    }
-
-    private static playToDraw(opponentMove: OPPONENT_MOVE): SHAPE {
-        switch (opponentMove){
-            case OPPONENT_MOVE.ROCK:
-                return SHAPE.ROCK;
-            case OPPONENT_MOVE.PAPER:
-                return SHAPE.PAPER;
-            case OPPONENT_MOVE.SCISSORS:
-                return SHAPE.SCISSORS;
-        }
-    }
-
-    private static playToWin(opponentMove: OPPONENT_MOVE): SHAPE {
-        switch (opponentMove){
-            case OPPONENT_MOVE.ROCK:
-                return SHAPE.PAPER;
-            case OPPONENT_MOVE.PAPER:
-                return SHAPE.SCISSORS;
-            case OPPONENT_MOVE.SCISSORS:
-                return SHAPE.ROCK;
-        }
-    }
-}
 
 describe("MovesToRoundOutcomeStrategy", () => {
     let movesToRoundOutcomeStrategy: MovesToRoundOutcomeStrategy;
@@ -265,30 +218,30 @@ describe("MovesToRoundOutcomeStrategy", () => {
             })
         })
     })
-    describe.skip("Complete round", () => {
+    describe("Complete round", () => {
         test("Sould return entire round as shape", () => {
-            const input:[OPPONENT_MOVE, MY_MOVE][] = [[OPPONENT_MOVE.ROCK, MY_MOVE.SCISSORS]];
+            const input:[OPPONENT_MOVE, MY_OUTCOME][] = [[OPPONENT_MOVE.ROCK, MY_OUTCOME.DRAW]];
 
             const rounds = movesToRoundOutcomeStrategy.transform(input)
 
             expect(rounds[0].getOpponentMove()).toEqual(SHAPE.ROCK)
-            expect(rounds[0].getMyMove()).toEqual(SHAPE.SCISSORS)
+            expect(rounds[0].getMyMove()).toEqual(SHAPE.ROCK)
         })
 
         test("Sould return multiple rounds as shape", () => {
-            const round1:[OPPONENT_MOVE, MY_MOVE] = [OPPONENT_MOVE.ROCK, MY_MOVE.SCISSORS];
-            const round2:[OPPONENT_MOVE, MY_MOVE] = [OPPONENT_MOVE.PAPER, MY_MOVE.ROCK];
-            const round3:[OPPONENT_MOVE, MY_MOVE] = [OPPONENT_MOVE.SCISSORS, MY_MOVE.PAPER];
+            const round1:[OPPONENT_MOVE, MY_OUTCOME] = [OPPONENT_MOVE.ROCK, MY_OUTCOME.DRAW];
+            const round2:[OPPONENT_MOVE, MY_OUTCOME] = [OPPONENT_MOVE.PAPER, MY_OUTCOME.LOSE];
+            const round3:[OPPONENT_MOVE, MY_OUTCOME] = [OPPONENT_MOVE.SCISSORS, MY_OUTCOME.WIN];
             const input = [round1, round2, round3];
 
             const rounds = movesToRoundOutcomeStrategy.transform(input)
 
             expect(rounds[0].getOpponentMove()).toEqual(SHAPE.ROCK)
-            expect(rounds[0].getMyMove()).toEqual(SHAPE.SCISSORS)
+            expect(rounds[0].getMyMove()).toEqual(SHAPE.ROCK)
             expect(rounds[1].getOpponentMove()).toEqual(SHAPE.PAPER)
             expect(rounds[1].getMyMove()).toEqual(SHAPE.ROCK)
             expect(rounds[2].getOpponentMove()).toEqual(SHAPE.SCISSORS)
-            expect(rounds[2].getMyMove()).toEqual(SHAPE.PAPER)
+            expect(rounds[2].getMyMove()).toEqual(SHAPE.ROCK)
         })
     })
 })
