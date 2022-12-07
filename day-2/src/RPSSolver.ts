@@ -1,11 +1,11 @@
 import {RPSInputParser} from "./RPSInputParser";
-import {MovesToRoundWithBothMoveStrategy} from "./MovesToRoundTransformer";
+import {MovesToRoundStrategy, MovesToRoundWithBothMoveStrategy} from "./MovesToRoundTransformer";
 import {RPSScoreCalculator} from "./RPSScoreCalculator";
 
 export class RPSSolver {
     constructor(
         private rpsInputParser: RPSInputParser,
-        private movesToRPSTransformer: MovesToRoundWithBothMoveStrategy,
+        private movesToRPSTransformer: MovesToRoundStrategy,
         private rpsScoreCalculator: RPSScoreCalculator) {
     }
 

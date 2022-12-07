@@ -42,6 +42,9 @@ export abstract class MovesToRoundStrategy {
     }
 }
 
+/* Y'a beaucoup de switch dans tous les sens, les enum sont peut être pas le mieux.
+Peut être qu'avoir une class Rock et Paper et Scissors avec des méthodes pour avoir leur coup gagnant + perdant + draw + eux même en Shape
+Mais bon c'est du X Y Z */
 export class MovesToRoundWithBothMoveStrategy extends MovesToRoundStrategy {
     transformMyMoveToRPS(round: [OPPONENT_MOVE, MY_MOVE]): SHAPE {
         const myMove = round[1]
