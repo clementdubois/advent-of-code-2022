@@ -9,13 +9,14 @@ import {
 
 
 /* Questions qui me viennent :
-*  - Avec cette démarche j'implémente deux règles en même temps ( calcul du score de la mache = point de victoire + ce qu'on a joué),
-* est ce qu'il faut décomposé sachant que d'un point de vue externe seul nous interesse le total ?
-* => Ma solution, je créer des classe intermédiaire que je tests, pas sur que ça soit ok
-* => Pareil avec Round que je teste pour avoir l'exhaustivité des cas mais quand je commence les tests j'ai déjà pleins de cas qui sont vert
-* => Idem pour les tests de WIN qui étaient déjà tous vert
-* => J'ai bien découpé les responsabilités et testé unitairement tous les cas mais est ce que je suis pas trop couplé à l'implem,
+*  - Avec cette démarche j'implémente deux règles en même temps (calcul du score de la manche = point de victoire + ce qu'on a joué),
+* est-ce qu'il faut décomposer sachant que d'un point de vue externe seul nous intéresse le total ?
+* => Ma solution, je crée des classes intermédiaires que je teste, pas sûr que ça soit ok
+* => Pareil avec Round que je teste pour avoir l'exhaustivité des cas, mais quand je commence les tests j'ai déjà pleins de cas qui sont verts
+* => Idem pour les tests de WIN qui étaient déjà tous verts
+* => J'ai bien découpé les responsabilités et testé unitairement tous les cas, mais est ce que je ne suis pas trop couplé à l'implem,
 *  j'ai l'impression qui si je change ma structure de classe mes tests bas niveau (genre Round) vont être un frein
+* => Est ce qu'il faut faire de l'injection de dépendance ou des mocks ?
 * */
 describe("RPSScoreCalculator", () => {
     describe("Round", () => {

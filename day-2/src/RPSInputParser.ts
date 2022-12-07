@@ -1,6 +1,3 @@
-import {SHAPE} from "./RPSScoreCalculator";
-import {MovesToRPSTransformer} from "./MovesToRPSTransformer";
-
 export enum OPPONENT_MOVE {
     ROCK = "A",
     PAPER = "B",
@@ -12,29 +9,23 @@ export enum MY_MOVE {
     SCISSORS = "Z",
 }
 
-export class StringInputToRoundParser {
-    private inputMoveToRPSTransformer: MovesToRPSTransformer;
+export type InputRound = [OPPONENT_MOVE, MY_MOVE];
 
-    constructor() {
-        this.inputMoveToRPSTransformer = new MovesToRPSTransformer();
-    }
-
-    parse(input: string): [SHAPE, SHAPE][] {
-        const moves = StringInputToRoundParser
+export class RPSInputParser {
+    parse(input: string): InputRound[] {
+        return RPSInputParser
             .parseRounds(input)
-            .map(StringInputToRoundParser.parseMoves)
-        return this.inputMoveToRPSTransformer.transform(moves)
+            .map(RPSInputParser.parseMoves)
     }
 
-    private static parseRounds(input: string) {
-        return input.split("\n").filter(round => round);
+    private static parseRounds(input: string): string[] {
+        const ROUND_SEPARATOR = "\n";
+        return input.split(ROUND_SEPARATOR).filter(round => round);
     }
 
-    private static parseMoves(input: string) {
+    private static parseMoves(input: string): InputRound {
         const MOVE_SEPARATOR = " ";
-        return input.split(MOVE_SEPARATOR).filter(move => move) as [OPPONENT_MOVE, MY_MOVE];
+        return input.split(MOVE_SEPARATOR).filter(move => move) as InputRound;
     }
-
-
 }
 

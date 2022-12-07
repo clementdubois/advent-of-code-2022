@@ -1,5 +1,4 @@
-import {SHAPE} from "../src/RPSScoreCalculator";
-import {MY_MOVE, OPPONENT_MOVE, StringInputToRoundParser} from "../src/RPSInputParser";
+import {MY_MOVE, OPPONENT_MOVE, RPSInputParser} from "../src/RPSInputParser";
 
 /* Au début j'avais juste un StringInputToRoundParser, je me rends compte qu'il y a deux responsabilités :
 transformer l'input textuel en tableau et transformer les coups en SHAPE
@@ -7,90 +6,33 @@ transformer l'input textuel en tableau et transformer les coups en SHAPE
 est ce que je suis pas en train de coupler à l'implem, est ce qu'il faut une autre classe qui fasse le relai entre le parser et le transformer ?
 */
 describe("StringInputToRoundParser", () => {
-    let rpsInputParser: StringInputToRoundParser;
+    let rpsInputParser: RPSInputParser;
 
     beforeEach(() => {
-        rpsInputParser = new StringInputToRoundParser();
+        rpsInputParser = new RPSInputParser();
     })
-    describe("Opponent move", () => {
+    test("Should return empty array if no round", () => {
+       const input = "";
 
-        test("Should return empty array for no input", () => {
-            const input = "";
+       const rounds = rpsInputParser.parse(input)
 
-            const rounds = rpsInputParser.parse(input)
+        expect(rounds.length).toEqual(0)
+    });
+   test("Should split moves from one round", () => {
+      const input = OPPONENT_MOVE.ROCK + " " + MY_MOVE.PAPER;
 
-            expect(rounds).toEqual([])
-        })
+      const rounds = rpsInputParser.parse(input)
 
-        test("Should return Rock shape for 'A'", () => {
-            const input = OPPONENT_MOVE.ROCK;
+       expect(rounds).toEqual([[OPPONENT_MOVE.ROCK, MY_MOVE.PAPER]])
+   });
 
-            const rounds = rpsInputParser.parse(input)
+    test("Should split multiple rounds", () => {
+        const round1 = OPPONENT_MOVE.ROCK + " " + MY_MOVE.PAPER;
+        const round2 = OPPONENT_MOVE.SCISSORS + " " + MY_MOVE.SCISSORS;
+        const input = `${round1}\n${round2}`;
 
-            expect(rounds[0][0]).toEqual(SHAPE.ROCK)
-        })
+        const rounds = rpsInputParser.parse(input)
 
-        test("Should return Paper shape for 'B'", () => {
-            const input = OPPONENT_MOVE.PAPER;
-
-            const rounds = rpsInputParser.parse(input)
-
-            expect(rounds[0][0]).toEqual(SHAPE.PAPER)
-        })
-
-        test("Should return Scissors shape for 'C'", () => {
-            const input = OPPONENT_MOVE.SCISSORS;
-
-            const rounds = rpsInputParser.parse(input)
-
-            expect(rounds[0][0]).toEqual(SHAPE.SCISSORS)
-        })
-    })
-    describe("My move", () => {
-        test("Should return Rock shape for 'X'", () => {
-            const input = OPPONENT_MOVE.ROCK + " " + MY_MOVE.ROCK;
-
-            const rounds = rpsInputParser.parse(input)
-
-            expect(rounds[0][1]).toEqual(SHAPE.ROCK)
-        })
-        test("Should return Paper shape for 'Y'", () => {
-            const input = OPPONENT_MOVE.ROCK + " " + MY_MOVE.PAPER;
-
-            const rounds = rpsInputParser.parse(input)
-
-            expect(rounds[0][1]).toEqual(SHAPE.PAPER)
-        })
-        test("Should return Scissors shape for 'Z'", () => {
-            const input = OPPONENT_MOVE.ROCK + " " + MY_MOVE.SCISSORS;
-
-            const rounds = rpsInputParser.parse(input)
-
-            expect(rounds[0][1]).toEqual(SHAPE.SCISSORS)
-        })
-    })
-    describe("Complete round", () => {
-        test("Sould return entire round as shape", () => {
-            const input = OPPONENT_MOVE.ROCK + " " + MY_MOVE.SCISSORS;
-
-            const rounds = rpsInputParser.parse(input)
-
-            expect(rounds[0]).toEqual([SHAPE.ROCK, SHAPE.SCISSORS])
-        })
-
-        test("Sould return multiple rounds as shape", () => {
-            const round1 = OPPONENT_MOVE.ROCK + " " + MY_MOVE.SCISSORS;
-            const round2 = OPPONENT_MOVE.PAPER + " " + MY_MOVE.ROCK;
-            const round3 = OPPONENT_MOVE.SCISSORS + " " + MY_MOVE.PAPER;
-            const input = `${round1}\n${round2}\n${round3}`;
-
-            const rounds = rpsInputParser.parse(input)
-
-            expect(rounds).toEqual([
-                [SHAPE.ROCK, SHAPE.SCISSORS],
-                [SHAPE.PAPER, SHAPE.ROCK],
-                [SHAPE.SCISSORS, SHAPE.PAPER]
-            ])
-        })
-    })
+        expect(rounds).toEqual([[OPPONENT_MOVE.ROCK, MY_MOVE.PAPER], [OPPONENT_MOVE.SCISSORS, MY_MOVE.SCISSORS]])
+    });
 });
