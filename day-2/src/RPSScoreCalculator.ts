@@ -1,5 +1,5 @@
-import {SHAPE} from "./Shape";
-import {OUTCOME, Round} from "./Round";
+import {SHAPE} from "./entites/Shape";
+import {OUTCOME, Round} from "./entites/Round";
 
 export class RPSScoreCalculator {
     private scoreOutcomeCalculator: ScoreOutcomeCalculator;

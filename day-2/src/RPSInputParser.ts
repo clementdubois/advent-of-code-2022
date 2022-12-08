@@ -1,6 +1,6 @@
-import {MY_MOVE, OPPONENT_MOVE} from "./MovesToRoundTransformer";
+import {MY_STRATEGY, OPPONENT_MOVE} from "./MovesToRoundStrategy";
 
-export type InputRound = [OPPONENT_MOVE, MY_MOVE];
+export type InputRound = [OPPONENT_MOVE, MY_STRATEGY];
 
 export class RPSInputParser {
     parse(input: string): InputRound[] {

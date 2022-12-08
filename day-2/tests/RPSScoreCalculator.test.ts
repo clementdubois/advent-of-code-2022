@@ -3,8 +3,8 @@ import {
     ScoreBonusCalculator,
     ScoreOutcomeCalculator
 } from "../src/RPSScoreCalculator";
-import {SHAPE} from "../src/Shape";
-import {OUTCOME, Round} from "../src/Round";
+import {SHAPE} from "../src/entites/Shape";
+import {OUTCOME, Round} from "../src/entites/Round";
 
 
 /* Questions qui me viennent :

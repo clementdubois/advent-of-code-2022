@@ -1,4 +1,4 @@
-import {MY_MOVE, OPPONENT_MOVE} from "./MovesToRoundTransformer";
+import {MY_MOVE, OPPONENT_MOVE} from "../MovesToRoundStrategy";
 
 export enum SHAPE {
     ROCK,

@@ -1,5 +1,5 @@
 import {RPSInputParser} from "./RPSInputParser";
-import {MovesToRoundStrategy, MovesToRoundWithBothMoveStrategy} from "./MovesToRoundTransformer";
+import {MovesToRoundStrategy, MovesToRoundWithBothMoveStrategy} from "./MovesToRoundStrategy";
 import {RPSScoreCalculator} from "./RPSScoreCalculator";
 
 export class RPSSolver {

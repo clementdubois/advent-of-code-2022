@@ -1,5 +1,5 @@
-import {SHAPE, ShapeHandler} from "./Shape";
-import {Round} from "./Round";
+import {SHAPE, ShapeHandler} from "./entites/Shape";
+import {Round} from "./entites/Round";
 
 export enum OPPONENT_MOVE {
     ROCK = "A",
@@ -7,7 +7,7 @@ export enum OPPONENT_MOVE {
     SCISSORS = 'C'
 }
 
-type MY_STRATEGY = "X" | "Y" | "Z"
+export type MY_STRATEGY = "X" | "Y" | "Z"
 
 export enum MY_MOVE {
     ROCK = "X",

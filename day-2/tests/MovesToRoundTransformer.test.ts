@@ -4,8 +4,8 @@ import {
     MY_MOVE,
     MY_OUTCOME,
     OPPONENT_MOVE
-} from "../src/MovesToRoundTransformer";
-import {SHAPE} from "../src/Shape";
+} from "../src/MovesToRoundStrategy";
+import {SHAPE} from "../src/entites/Shape";
 
 /* Question : Quand j'applique le pattern stratégie pour séparer la transformation selon que le coup soit un vrai coup (part 1 )
 *  ou que le coup soit le résultat (part2) je me retrouve a dupliqué plein de tests car la partie concernant les coups de l'adversaire restent identique*/
